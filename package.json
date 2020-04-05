@@ -1,0 +1,23 @@
+{
+  "name": "bruinfitnessserver",
+  "version": "1.0.0",
+  "description": "Bruin Fitness server side code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasmburke/BruinFitnessServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomasmburke/BruinFitnessServer/issues"
+  },
+  "homepage": "https://github.com/thomasmburke/BruinFitnessServer#readme",
+  "dependencies": {
+    "firestore-export-import": "^0.4.0",
+    "yargs": "^15.3.1"
+  }
+}
