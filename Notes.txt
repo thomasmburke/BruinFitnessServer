@@ -2,6 +2,10 @@ Likely will hold information for payment system
 - for in store purchases it looks like Square or Shopify are easiest to start out with
 - Square takes a bit more but may be worthwhile with their Point of sale POS systems that easily integrate with ipads
     - customization of receipts is also allowed
+    - Has a well built API if I wanted to look at customer lists and provide access to the mobile apps after signing up for a subscription
+    - Easy refund process and great POS readers
+    - Tracks business trends / reports
+    - Deposit to your bank account (fees per deposit)
 - once the business has its footing then opening a merchant account will likely save a good amount of money but come with long contracts
     - This will likely come when annual revenue surpasses 250K
 
