@@ -1,0 +1,5 @@
+TODO:
+- delete user from auth DB if membership is cancelled
+
+Nice to haves:
+- email link authentication triggered by gym user registration
