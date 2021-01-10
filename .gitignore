@@ -1,4 +1,5 @@
 # Server creds dir
+schedule_export.json
 creds/
 .DS_Store
 
