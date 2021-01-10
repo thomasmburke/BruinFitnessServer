@@ -1,5 +1,6 @@
 # Server creds dir
 creds/
+.DS_Store
 
 # Logs
 logs
