@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime as dt
+from datetime import timedelta
 from os.path import abspath, dirname, join
 
 from google.cloud import firestore
@@ -12,6 +14,654 @@ logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
     datefmt='%Y-%m-%dT%H:%M:%S')
+
+DEFAULT_CLASSES = {
+    'Monday': 
+    [
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:30am - 8:30am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:30pm - 5:30pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:15pm - 8:15pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:30am',
+            'workoutType': 'Weightlifting'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00am - 8:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '8:00am - 9:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '10:00am - 11:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '11:00am - 12:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '1:00pm - 2:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '2:00pm - 3:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:00pm - 5:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00pm - 8:00pm',
+            'workoutType': 'Open Gym'
+        },
+    ],
+    'Tuesday': 
+    [
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:30am - 8:30am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:30pm - 5:30pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:15pm - 8:15pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:30am',
+            'workoutType': 'Weightlifting'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00am - 8:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '8:00am - 9:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '10:00am - 11:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '11:00am - 12:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '1:00pm - 2:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '2:00pm - 3:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:00pm - 5:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00pm - 8:00pm',
+            'workoutType': 'Open Gym'
+        },
+    ],
+    'Wednesday': 
+    [
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:30am - 8:30am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:30pm - 5:30pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:15pm - 8:15pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:30am',
+            'workoutType': 'Weightlifting'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00am - 8:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '8:00am - 9:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '10:00am - 11:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '11:00am - 12:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '1:00pm - 2:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '2:00pm - 3:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:00pm - 5:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00pm - 8:00pm',
+            'workoutType': 'Open Gym'
+        },
+    ],
+    'Thursday': 
+    [
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:30am - 8:30am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:30pm - 5:30pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:15pm - 8:15pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:30am',
+            'workoutType': 'Weightlifting'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00am - 8:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '8:00am - 9:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '10:00am - 11:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '11:00am - 12:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '1:00pm - 2:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '2:00pm - 3:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:00pm - 5:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00pm - 8:00pm',
+            'workoutType': 'Open Gym'
+        },
+    ],
+    'Friday': 
+    [
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:30am - 8:30am',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:30pm - 5:30pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:15pm - 8:15pm',
+            'workoutType': 'Metcon'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:30am',
+            'workoutType': 'Weightlifting'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00am - 7:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00am - 8:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '8:00am - 9:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '9:00am - 10:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '10:00am - 11:00am',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '11:00am - 12:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '12:00pm - 1:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '1:00pm - 2:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '2:00pm - 3:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '3:00pm - 4:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '4:00pm - 5:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '6:00pm - 7:00pm',
+            'workoutType': 'Open Gym'
+        },
+        {
+            'reservationCnt': 0,
+            'reservedUsers': [],
+            'time': '7:00pm - 8:00pm',
+            'workoutType': 'Open Gym'
+        },
+    ]
+}
 
 def initialize_firestore_client() -> "class google.cloud.firestore_v1.client.Client":
     """
@@ -35,6 +685,28 @@ def initialize_firestore_client() -> "class google.cloud.firestore_v1.client.Cli
         except:
             logger.error("Couldn't initialize firestore client via Service Account key nor GOOGLE_APPLICATION_CREDENTIALS")
             raise Exception("Couldn't initialize firestore client via Service Account key nor GOOGLE_APPLICATION_CREDENTIALS")
+
+def get_first_day_of_next_month() -> "datetime.datetime":
+    """
+    Summary: Gets the first day of next month based off current datetime
+    """
+    return (dt.today().replace(day=1) + timedelta(days=32)).replace(day=1)
+
+def add_classes():
+    """
+    Summary: Writes next month's classes (with empty reservations) to Firestore.
+    """
+    #TODO: Have this run on the 20th of every month. (Cloud Scheduler -> PubSub -> GCF)?
+    db = initialize_firestore_client()
+    # db.collection(f'schedules/Redwood City/dates/{today}/classes').add(DEFAULT_CLASSES[0])
+
+    classDate = get_first_day_of_next_month()
+    classDateString = classDate.strftime('%Y-%m-%d')
+    logger.info(f"classDate: {classDate.strftime('%Y-%m-%d')}")
+    logger.info(f"classDate day of week: {classDate.strftime('%A')}")
     
-db = initialize_firestore_client()
-collectionRef = db.collection('constants').add({'test': 'testvalue'})
+
+
+if __name__ == "__main__":
+    add_classes()
+
