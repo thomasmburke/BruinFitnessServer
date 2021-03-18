@@ -35,7 +35,8 @@ if (argv.export && argv.import) {
 
 // Export your data
 function export_schedule(){
-backup('schedules')
+// backup('schedules/San Leandro/schedule')
+backup(`schedules/Redwood City/dates/2021-01-15/classes`)
   .then( function(data) {
     fs.writeFile("./importFiles/schedule_export.json", JSON.stringify(data, null, 4), function(err) {
         if (err) {console.log(err);}

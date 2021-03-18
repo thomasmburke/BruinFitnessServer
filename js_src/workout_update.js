@@ -16,10 +16,10 @@
 
  const getTodaysFirestoreDateString = () => {
     let today = new Date();
-    let day = String(today.getDate());
-    let month = String(today.getMonth() + 1); //January is 0!
+    let day = ('0' + String(today.getDate())).slice(-2);
+    let month = ('0' + String(today.getMonth() + 1)).slice(-2); //January is 0!
     let year = String(today.getFullYear());
-    return `${year}_${month}_${day}`;
+    return `${year}-${month}-${day}`;
     }
 
  
@@ -39,7 +39,7 @@
  
  // Export your data
  function export_workout(){
- backup('workouts/2020_02_14')
+ backup('workouts/2020-02-14')
    .then( function(data) {
      fs.writeFile(`./importFiles/workout_${getTodaysFirestoreDateString()}_export.json`, JSON.stringify(data, null, 4), function(err) {
          if (err) {console.log(err);}
