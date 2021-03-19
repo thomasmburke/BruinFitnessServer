@@ -811,21 +811,29 @@ def add_classes():
     # Get start and end dates to populate classes for
     # startDate: first day of next month
     startDate = get_first_day_of_next_month(dt.today())
+    startDateString = startDate.strftime('%Y-%m-%d')
     # endDate first day of the month after startDate
     endDate = get_first_day_of_next_month(startDate)
     logger.info(f"startDate: {startDate.strftime('%Y-%m-%d')}")
     logger.info(f"endDate: {endDate.strftime('%Y-%m-%d')}")
-    
-    # Iterate through each date in the month
-    for classDate in daterange(startDate, endDate):
-        classDateString = classDate.strftime("%Y-%m-%d")
-        dayOfWeek = classDate.strftime('%A')
-        logger.info(f'writing class data for classDate: {classDateString}')
-        logger.info(f"classDate day of week: {dayOfWeek}")
-        # Add each class for the day separately as they all have their own reservationCnt
-        # TODO: wrap this in a try, except and send a notification in case something doesn't work as expected
-        for defaultClass in DEFAULT_CLASSES[dayOfWeek]:
-            db.collection(f'schedules/Redwood City/dates/{classDateString}/classes').add(defaultClass)
+
+    # Check if a document exists under the start date of next month's class schedule
+    docExists = db.collection(f'schedules/Redwood City/dates/{startDateString}/classes').limit(1).get()
+    # If it does exist no need to add the classes again
+    if docExists:
+        logger.warning('classes have already been added, so no writes will occur to avoid contamination..')
+    # If no doc exists we'll assume it is safe to classes for next month
+    else:
+        # Iterate through each date in the month
+        for classDate in daterange(startDate, endDate):
+            classDateString = classDate.strftime("%Y-%m-%d")
+            dayOfWeek = classDate.strftime('%A')
+            logger.info(f'writing class data for classDate: {classDateString}')
+            logger.info(f"classDate day of week: {dayOfWeek}")
+            # Add each class for the day separately as they all have their own reservationCnt
+            # TODO: wrap this in a try, except and send a notification in case something doesn't work as expected
+            for defaultClass in DEFAULT_CLASSES[dayOfWeek]:
+                db.collection(f'schedules/Redwood City/dates/{classDateString}/classes').add(defaultClass)
     
 
 
