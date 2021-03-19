@@ -12,8 +12,8 @@ def deploy_gcf() -> "int":
     """
     logger.info('deploying Google Cloud Function...')
     filePath = os.path.dirname(os.path.realpath(__file__))
-    deployPath = os.path.join(filePath, "src/")
-    return subprocess.call(args=f"gcloud functions deploy add-classes --entry-point add_classes --runtime python38 --trigger-topic mfp-1-topic --timeout 540s --project {os.getenv('BRUIN_FITNESS_PROJECT_ID')}".split(" "), cwd=deployPath)
+    deployPath = os.path.join(filePath, "add_classes/")
+    return subprocess.call(args=f"gcloud functions deploy add_classes --entry-point add_classes --runtime python38 --trigger-topic add_classes --timeout 540s --project {os.getenv('BRUIN_FITNESS_PROJECT_ID')}".split(" "), cwd=deployPath)
 
 
 if __name__ == '__main__':
