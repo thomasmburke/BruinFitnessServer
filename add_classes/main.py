@@ -801,9 +801,30 @@ def daterange(startDate: "datetime.datetime", endDate: "datetime.datetime"):
     for n in range(int((endDate - startDate).days)):
         yield startDate + timedelta(n)
 
-def add_classes():
+def send_error_msg(db, subject, html):
+    """
+    Summary: Sends an email to my account if an error/warning is encountered in the process
+    """
+    db.collection('errors').add({
+        "to": "tburke@bu.edu",
+        "message": {
+            "subject": subject,
+            "html": html
+        }
+    })
+
+def add_classes(event, context):
     """
     Summary: Writes next month's classes (with empty reservations) to Firestore.
+    """
+    """Background Cloud Function to be triggered by Pub/Sub.
+    Args:
+         event (dict):  The dictionary with data specific to this type of
+         event. The `data` field contains the PubsubMessage message. The
+         `attributes` field will contain custom attributes if there are any.
+         context (google.cloud.functions.Context): The Cloud Functions event
+         metadata. The `event_id` field contains the Pub/Sub message ID. The
+         `timestamp` field contains the publish time.
     """
     #TODO: Have this run on the 20th of every month. (Cloud Scheduler -> PubSub -> GCF)?
     db = initialize_firestore_client()
@@ -822,6 +843,9 @@ def add_classes():
     # If it does exist no need to add the classes again
     if docExists:
         logger.warning('classes have already been added, so no writes will occur to avoid contamination..')
+        # Send email alert as this is unexpected
+        send_error_msg(db=db, subject="GCF:add_classes: No classes added because some were already detected",
+        html=f"No classes were added for the month of {startDateString}<br />This is likely the cron that runs mid month. I suggest seeing if any classes were created and creating them if not.")
     # If no doc exists we'll assume it is safe to classes for next month
     else:
         # Iterate through each date in the month
@@ -833,7 +857,22 @@ def add_classes():
             # Add each class for the day separately as they all have their own reservationCnt
             # TODO: wrap this in a try, except and send a notification in case something doesn't work as expected
             for defaultClass in DEFAULT_CLASSES[dayOfWeek]:
-                db.collection(f'schedules/Redwood City/dates/{classDateString}/classes').add(defaultClass)
+                # retry writing Firestore document 10 times upon failure
+                for i in range(0,10):
+                    try:
+                        # if write is successful move on to next doc
+                        db.collection(f'schedules/Redwood City/dates/{classDateString}/classes').add(defaultClass)
+                        break
+                    except Exception as e:
+                        # if write is unsuccessful then we will iterate until we failed 10 times
+                        # in which case we raise an exception and halt the process.
+                        logger.error(f"error writing class document: {e}")
+                        # retry document write
+                        if i == 9:
+                            send_error_msg(db=db,subject="GCF:add_classes: Error writing class", 
+                            html=f"document failed to be added for {classDate}<br />The document that failed to be added contained the following content<br />{defaultClass}")
+                            raise e
+                        continue
     
 
 
